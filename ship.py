@@ -11,6 +11,11 @@ class Ship():
         self.screen_rect = screen.get_rect()  # прямоугольник экрана
         self.rect.centerx = self.screen_rect.centerx  # Х картинки = Х экрана
         self.rect.bottom = self.screen_rect.bottom  # картинка внизу экрана
+        self.mright = False
+
+    def update(self):  # движение корабля
+        if self.mright:
+            self.rect.centerx += 1
 
     def blitme(self):
         """Рисует корабль в текущей позиции"""

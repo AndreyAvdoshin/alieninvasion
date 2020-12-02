@@ -1,5 +1,5 @@
-import sys
 import pygame
+import game_functions as gf
 from settings import Settings
 from ship import Ship
 
@@ -13,12 +13,9 @@ def run():
     ship = Ship(screen)  # создание корабля
 
     while True:
-        for event in pygame.event.get():  # отслеживание событий
-            if event.type == pygame.QUIT:  # если нажимаем на крестик
-                sys.exit()  # закрытие окна
-        screen.fill(settings.bg_color)  # заливка экрана
-        ship.blitme()  # отображение корабля
-        pygame.display.flip()  # отображение последнего показа экрана
+        gf.check_events(ship)  # проверяем действия игрока
+        ship.update()  # проверяем что с кораблем
+        gf.update_screen(settings, screen, ship)  # перерисовываем экран
 
 
 run()
