@@ -10,7 +10,7 @@ def run():
     screen = pygame.display.set_mode(
         (settings.screen_width, settings.screen_height))  # размеры окна
     pygame.display.set_caption('Alien Invasion 9000')  # заголовок окна
-    ship = Ship(screen)  # создание корабля
+    ship = Ship(settings, screen)  # создание корабля
 
     while True:
         gf.check_events(ship)  # проверяем действия игрока

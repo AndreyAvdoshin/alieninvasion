@@ -10,9 +10,14 @@ def check_events(ship):
         elif event.type == pygame.KEYDOWN:  # если кнопка нажата
             if event.key == pygame.K_RIGHT:  # если нажата кнопка вправо
                 ship.mright = True  # движение
+            elif event.key == pygame.K_LEFT:
+                ship.mleft = True
         elif event.type == pygame.KEYUP:  # если кнопка отжата
             if event.key == pygame.K_RIGHT:  # если отжата кнопка вправо
                 ship.mright = False  # остановка движения
+            elif event.key == pygame.K_LEFT:
+                ship.mleft = False
+
 
 def update_screen(settings, screen, ship):
     """Обновляет изображения на экране и отображает новый экран"""
