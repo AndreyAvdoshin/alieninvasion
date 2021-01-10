@@ -9,7 +9,9 @@ def check_events(settings, screen, ship, bullets):
         if event.type == pygame.QUIT:  # если нажимаем на крестик
             sys.exit()  # закрытие окна
         elif event.type == pygame.KEYDOWN:  # если кнопка нажата
-            if event.key == pygame.K_RIGHT:  # если нажата кнопка вправо
+            if event.key == pygame.K_q:  # если нажимаем на q
+                sys.exit()  # закрытие окна
+            elif event.key == pygame.K_RIGHT:  # если нажата кнопка вправо
                 ship.mright = True  # движение
             elif event.key == pygame.K_LEFT:
                 ship.mleft = True
@@ -24,10 +26,18 @@ def check_events(settings, screen, ship, bullets):
                 ship.mleft = False
 
 
-def update_screen(settings, screen, ship, bullets):
+def update_screen(settings, screen, ship, alien, bullets):
     """Обновляет изображения на экране и отображает новый экран"""
     screen.fill(settings.bg_color)  # заливка экрана
     for bullet in bullets.sprites():
         bullet.draw_bullet()  # рисуем пули
     ship.blitme()  # отображение корабля
+    alien.blitme()
     pygame.display.flip()  # отображение последнего показа экрана
+
+def update_bullets(bullets):
+    """Обновляет позиции пуль и уничтожает старые пули"""
+    bullets.update()  # обновление позиции пули
+    for bullet in bullets.copy():  # удаление пуль
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
