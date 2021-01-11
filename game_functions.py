@@ -1,6 +1,7 @@
 import sys
 import pygame
 from bullet import Bullet
+from alien import Alien
 
 
 def check_events(settings, screen, ship, bullets):
@@ -25,14 +26,13 @@ def check_events(settings, screen, ship, bullets):
             elif event.key == pygame.K_LEFT:
                 ship.mleft = False
 
-
-def update_screen(settings, screen, ship, alien, bullets):
+def update_screen(settings, screen, ship, aliens, bullets):
     """Обновляет изображения на экране и отображает новый экран"""
     screen.fill(settings.bg_color)  # заливка экрана
     for bullet in bullets.sprites():
         bullet.draw_bullet()  # рисуем пули
     ship.blitme()  # отображение корабля
-    alien.blitme()
+    aliens.draw(screen)
     pygame.display.flip()  # отображение последнего показа экрана
 
 def update_bullets(bullets):
@@ -41,3 +41,17 @@ def update_bullets(bullets):
     for bullet in bullets.copy():  # удаление пуль
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+def create_fleet(settings, screen, aliens):
+    """Создет флот пришельцев"""
+    alien = Alien(settings, screen)  # создание пришельца
+    alien_width = alien.rect.width  # ширина пришельца = ширине прямоугольника
+    available_space_x = settings.screen_width - 2 * alien_width  # вычисление места на экране
+    number_aliens_x = int(available_space_x / (2 * alien_width))  # сколько влезет на экран
+
+    # создание первого ряда пришельцев
+    for alien_number in range(number_aliens_x):
+        alien = Alien(settings, screen)
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
+        aliens.add(alien)
