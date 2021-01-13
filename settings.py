@@ -12,3 +12,7 @@ class Settings():
         self.bullet_height = 15  # высота пули
         self.bullet_color = 60, 60, 60  # цвет пули
         self.bullet_allowed = 3  # количество доступных пуль
+        # настройки пришельцев
+        self.alien_speed_factor = 1  # скорость перемещения пришельца
+        self.fleet_drop_speed = 10  # величина снижения пришельцев
+        self.fleet_direction = 1  # направнеине по координате X

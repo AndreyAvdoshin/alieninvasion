@@ -14,13 +14,13 @@ def run():
     ship = Ship(settings, screen)  # создание корабля
     bullets = Group()  # создание группы для хранения пуль
     aliens = Group()  # сождание группы пришельцев
-    gf.create_fleet(settings, screen, aliens)  # создание флота пришельцев
+    gf.create_fleet(settings, screen, ship, aliens)  # создание флота пришельцев
 
     while True:
         gf.check_events(settings, screen, ship, bullets)  # проверяем действия игрока
         ship.update()  # проверяем что с кораблем
         gf.update_bullets(bullets)  # проверяем что с пулями
+        gf.update_aliens(aliens)
         gf.update_screen(settings, screen, ship, aliens, bullets)  # перерисовываем экран
-
 
 run()
