@@ -23,6 +23,9 @@ class Ship():
             self.center -= self.settings.ship_speed_factor
         self.rect.centerx = self.center
 
+    def center_ship(self):
+        self.center = self.screen_rect.centerx
+
     def blitme(self):
         """Рисует корабль в текущей позиции"""
         self.screen.blit(self.image, self.rect)
