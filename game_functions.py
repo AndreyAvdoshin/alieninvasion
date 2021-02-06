@@ -5,11 +5,15 @@ from bullet import Bullet
 from alien import Alien
 
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
     """Орабатывает нажатия клавиш и события мыши"""
     for event in pygame.event.get():  # отслеживание событий
         if event.type == pygame.QUIT:  # если нажимаем на крестик
             sys.exit()  # закрытие окна
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # если нажимается мышка
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(settings, screen, stats,
+                play_button, ship, aliens, bullets, mouse_x, mouse_y)
         elif event.type == pygame.KEYDOWN:  # если кнопка нажата
             if event.key == pygame.K_q:  # если нажимаем на q
                 sys.exit()  # закрытие окна
@@ -27,13 +31,17 @@ def check_events(settings, screen, ship, bullets):
             elif event.key == pygame.K_LEFT:
                 ship.mleft = False
 
-def update_screen(settings, screen, ship, aliens, bullets):
+def update_screen(settings, screen, stats, sb, ship, aliens, 
+    bullets, play_button):
     """Обновляет изображения на экране и отображает новый экран"""
     screen.fill(settings.bg_color)  # заливка экрана
+    sb.show_score()
     for bullet in bullets.sprites():
         bullet.draw_bullet()  # рисуем пули
     ship.blitme()  # отображение корабля
     aliens.draw(screen)
+    if not stats.game_active:
+        play_button.draw_button()
     pygame.display.flip()  # отображение последнего показа экрана
 
 def update_bullets(settings, screen, ship, aliens, bullets):
@@ -46,11 +54,28 @@ def update_bullets(settings, screen, ship, aliens, bullets):
     if len(aliens) == 0:
         # Уничтожение существующих пуль и создание нового флота
         bullets.empty()
+        settings.increase_speed()
         create_fleet(settings, screen, ship, aliens)
 
 def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
     """Обработка коллизии пуль с пришельцами"""
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+def check_play_button(settings, screen, stats, play_button, ship,
+        aliens, bullets, mouse_x, mouse_y):
+    """Запускает новую игру при нажатии кнопки"""
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        # сброс настроек
+        settings.initialize_dynamic_settings()
+        # указатель мышки скрывается
+        pygame.mouse.set_visible(False)
+        stats.reset_stats()
+        stats.game_active = True
+        aliens.empty()
+        bullets.empty()
+        create_fleet(settings, screen, ship, aliens)
+        ship.center_ship()
 
 def get_number_aliens_x(settings, alien_width):
     """Вычисляет количество пришельцев в ряду"""
@@ -108,6 +133,7 @@ def ship_hit(settings, stats, screen, ship, aliens, bullets):
         sleep(0.5)  # пауза
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def check_aliens_bottom(settings, stats, screen, ship, aliens, bullets):
     """Проверяет, добрались ли пришельцы до нижнего края экрана"""
